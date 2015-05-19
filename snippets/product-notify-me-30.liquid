@@ -1,0 +1,19 @@
+{% if settings.notify_me_form %}  
+  <div style="margin-top:-52px;" class="notify_form" id="notify-form-{{ product.id }}" {% if product.available %}style="display:none"{% endif %}>
+    {% form 'contact' %}
+      {% if form.posted_successfully? %}
+        <p><em>Thanks! We will notify you when this product becomes available!</em></p>
+      {% elsif form.errors %}
+        <p><em>Please provide a valid email address.</em></p>
+      {% else %}
+        <p>
+          <br/>
+          {% if customer %}
+            <input type="hidden" name="contact[email]" value="{{ customer.email }}" />
+          {% else %}
+          {% endif %} 
+        </p>
+      {% endif %}
+    {% endform %}
+  </div>
+{% endif %}

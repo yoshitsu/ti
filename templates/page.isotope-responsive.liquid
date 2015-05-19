@@ -1,0 +1,25 @@
+<div class="container-grid content">
+  <div class="container-grid seventeen columns">
+  <div class="section clearfix">  
+
+    {{ page.content }}
+  </div>
+  </div></div>
+  
+
+<script type="text/javascript" src="{{ 'isotope.pkgd.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'cells-by-column.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'cells-by-row.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'fits-column.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'horizontal.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'masonry-horizontal.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'jqery-1.11.1.min.js' | asset_url }}"></script>
+<script type="text/javascript">
+  
+$('#container').isotope({
+  // options
+  itemSelector : '.element-item',
+  layoutMode : 'fitRows'
+});
+
+</script>

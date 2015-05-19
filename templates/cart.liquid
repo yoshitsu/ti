@@ -1,0 +1,165 @@
+<form action="/cart" method="post" id="cart_form">
+
+
+  {% if cart.item_count == 0 %}
+    <div class="sixteen columns">
+      <div class="section clearfix">
+        <p class="quote">There are no items in your cart. <a href="/collections/all">Continue Shopping &rarr;</a></p>
+      </div>
+    </div>
+  {% else %}
+
+    <div class="sixteen columns mobile_only">
+      <div class="right align_right">
+        <p>
+          <input type="submit" class="action_button" id="checkout" name="checkout" value="Checkout" />
+        </p>
+
+        {% if additional_checkout_buttons %}
+          <p>
+            {{ content_for_additional_checkout_buttons | google_button_options: 'transparent' }}
+          </p>
+        {% endif %}
+      </div>
+
+      <p class="left">
+        {{ cart.item_count }} {{ cart.item_count | pluralize: 'Item', 'Items' }} — <strong>{{ cart.total_price | money_with_currency }}</strong>
+        {% unless settings.tax_included %}
+          <br /><small><em>+ tax &amp; shipping</em></small>
+        {% endunless %}
+      </p>
+    </div>
+
+
+    <div class="checkout_table_header">
+      <div class="six columns title alpha">
+        <h1>Cart</h1>
+      </div>
+      <div class="four columns">
+        <h4>Product</h4>
+      </div>
+      <div class="two columns centered">
+        <h4>Quantity</h4>
+      </div>
+      <div class="two columns penultimate centered">
+        <h4>Unit Price</h4>
+      </div>
+      <div class="two columns righted omega">
+        <h4>Total</h4>
+      </div>
+    </div>
+
+    <ul  class="cart-products">
+    {% for item in cart.items %}
+      <li style=";list-style:none;padding:0">
+
+      <div class="four columns product_row">
+         <a href="{{ item.product.url }}" title="{{ item.product.title | escape }}">
+           {% assign found = false %}
+           {% for img in item.product.images %}
+             {% if found == false and item.variant.title contains img.alt %}
+               <img src="{{ img | product_img_url: 'large' }}"  alt="{{ item.product.title | escape }}" />
+               {% assign found = true %}
+              {% endif %}
+           {% endfor %}
+           {% if found == false %}
+             <img src="{{ item.product.featured_image | product_img_url: 'large' }}"  alt="{{ item.product.title | escape }}" />
+           {% endif %}
+         </a>
+      </div>
+
+      <div class="four columns title_column">
+        <p class="cart_price">
+          {{ item.price | money }}
+        </p>
+        <p>
+          <a href="{{item.product.url }}" title="{{ item.title | escape }}">{{ item.title }}</a><br>
+          {% for p in item.properties %}
+{% unless p.last == blank %}
+{% if p.last contains '/uploads/' %}
+{{ p.first }}: <a href="{{ p.last }}" target="_blank"><em>uploaded file</em></a><br />
+{% else %}
+{{ p.first }}: <em>{{ p.last }}</em><br />
+{% endif %}
+{% endunless %}
+{% endfor %}
+        </p>
+      </div>
+
+      <div class="two columns mobile_right centered" id="quantity_{{ forloop.index }}">
+        <input type="number" min="0" size="2" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" {% if item.product.metafields.inventory.ShappifyHidden == "true" %} readonly="readonly" {% endif %}/>
+        <div class="quantity-controls">
+          <a href="#" class="update_subtotal">Update</a></br>
+          <a href="/cart/change?line={{ forloop.index }}&quantity=0" onclick="" title="Remove Item">Remove</a>
+        </div>
+      </div>
+
+      <div class="two columns centered penultimate">
+        <p class="price_total">
+          {{ item.price | money }}
+        </p>
+      </div>
+
+      <div class="two columns omega righted">
+        <span class="price_total">{{ item.line_price | money }}</span>
+      </div>
+
+      <div class="clear"></div>
+    </li>
+    {% endfor %}
+    </ul>
+    <div class="cart-border">
+      <hr>
+    </div>
+    <div class="thirteen columns align_right">
+      <h4 class="subtotal">
+        Subtotal
+      </h4>
+    </div>
+
+    <div class="three columns omega righted">
+      <p class="subtotal_amount">
+        <strong>{{ cart.total_price | money }}</strong>
+        <small id="estimated-shipping" style="display:none">+ <em>{{ 0 | money }}</em> estimated shipping </small>
+
+        {% unless settings.tax_included %}
+          <small class="excluding_tax"><em>Excluding tax &amp; shipping</em></small>
+        {% endunless %}
+      </p>
+    </div>
+
+    {% if settings.display_special_instructions %}
+
+      <div class="four columns mobile_left">
+        <label for="note">Special Instructions<br/> or Gift Message:</label>
+      </div>
+
+      <div class="six columns">
+        <textarea id="note" name="note" rows="2" cols="1">{{ cart.note }}</textarea>
+</div>
+{% endif %}
+
+
+
+    <div class="seven columns update_subtotal_text align_right">
+        <a href="{% if cart.items.first.product.collections != blank %}{{ cart.items.first.product.collections.last.url }}{% else %}/collections/all{% endif %}" class="tokens-btn">Continue Shopping</a>
+        <a href="#" class="tokens-btn update_subtotal" style="margin-left:20px;">Update</a>
+    </div>
+
+    <div class="three columns">
+      <p>
+        <input type="submit" style="width: 100%;" class="tokens-btn primary action_button" id="checkout" name="checkout" value="Checkout" />
+      </p>
+
+<!--       {% if additional_checkout_buttons %}
+        <p>
+          {{ content_for_additional_checkout_buttons | google_button_options: 'transparent' }}
+        </p>
+      {% endif %} -->
+
+    </div>
+
+    {% include 'cart-shipping-calculator' %}
+  {% endif %}
+
+</form>

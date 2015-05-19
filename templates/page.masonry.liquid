@@ -1,0 +1,20 @@
+<div class="container-grid content">
+
+
+<div class="container-grid seventeen columns-grid" class="grid" >
+  <div class="section clearfix" >  
+    {{ page.content }}
+  </div>
+</div>
+</div>
+<script type="text/javascript" src="{{ 'masonry.pkgd.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'jqery-1.11.1.min.js' | asset_url }}"></script>
+<script type="text/javascript">
+   var container = document.querySelector('#container');
+var msnry = new Masonry( container, {
+  // options
+  columnWidth: 300,
+  itemSelector: '.item'
+});
+			
+</script>

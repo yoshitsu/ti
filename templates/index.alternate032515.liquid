@@ -1,0 +1,181 @@
+<div class="container-grid content">
+  <div class="container-grid seventeen columns-grid" class=grid>
+  <div class="section clearfix" >
+    <div class="isotope" style="padding: 40px 0; position: relative;">
+<div class="element-item width2"><a href="http://tokens-icons.com/products/new-england-patriots-super-bowl-game-used-football-cuff-links"> <img src="https://cdn.shopify.com/s/files/1/0226/2489/files/SB-XXXIX-Patriots-Football-FULL-600-300.JPG?18030" onmouseover="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/SuperBowl-XXXIX-CL-Fronts-600-300.jpg?18030'" onmouseout="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/SB-XXXIX-Patriots-Football-FULL-600-300.JPG?18030'" /> </a></div>
+<div class="element-item width2"><a href="http://tokens-icons.com/pages/whats-new"> <img src="https://cdn.shopify.com/s/files/1/0226/2489/files/Foxboro-02-02-15-603-300.jpg?18028" onmouseover="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/2NE-Foxboro-CL-Fronts-603-300.jpg?18028'" onmouseout="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/Foxboro-02-02-15-603-300.jpg?18028'" /> </a></div>
+<br />
+<!--<div id="homepage-description" style="text-align: center; padding: 20px 0 5px 0; margin-top: 17px;">
+<h2>Congratulations to the New England Patriots!</h2>
+</div>-->
+<div class="element-item"><a href="http://tokens-icons.com/pages/churchill-downs"> <img src="https://cdn.shopify.com/s/files/1/0226/2489/files/CD-Paddock-from-Book-1903-300.jpg?7597513136675316852" onmouseover="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/CDI-Paddock-Wood-CL-stack.jpg?1219896101473138510'" onmouseout="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/CD-Paddock-from-Book-1903-300.jpg?7597513136675316852'" /> </a></div>
+<div class="element-item width2"><a href="http://tokens-icons.com/collections/kentucky-collection"> <img src="https://cdn.shopify.com/s/files/1/0226/2489/files/kentucky_memorial_600desat.jpg?8808529205884154231" onmouseover="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/64UK-Kentucky-Floor-BottleOpener-Natural.jpg?15266998571499946123'" onmouseout="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/kentucky_memorial_600desat.jpg?8808529205884154231'" /> </a></div>
+<div class="element-item"><a href="http://tokens-icons.com/pages/national-hockey-league"> <img src="https://cdn.shopify.com/s/files/1/0226/2489/files/nhl-puck-library-300sq.jpg?17984" onmouseover="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/6PF-Flyers-CL-Edge-300sq.jpg?17984'" onmouseout="this.src='https://cdn.shopify.com/s/files/1/0226/2489/files/nhl-puck-library-300sq.jpg?17984'" /> </a></div>
+</div>
+    
+    
+<div id="homepage-description" style="margin-left:-20px !important;">
+<h2>Tokens &amp; Icons creates products from authentic elements to pay homage to their histories and those who value them.</h2>
+</div>
+    </div></div></div>
+
+
+
+{% if settings.slideshow_enabled %}
+  {% capture video_slide %}
+    {% if settings.video_embed != blank %}
+      {% if settings.video_width == 'set' %}
+        <li>
+          <div class="video-wrapper" style="width: {{ settings.video_width_px }}px; margin: 0 auto;">
+            <div class="video-container">
+              {{ settings.video_embed }}
+            </div>
+          </div>
+        </li>
+      {% else %}
+        <li>
+          <div class="video-container">
+            {{ settings.video_embed }}
+          </div>
+        </li>
+      {% endif %}
+    {% endif %}--
+  {% endcapture %}
+
+
+  <div class="sixteen columns">
+    <div class="section">
+      <div id="homepage_slider" class="flexslider">
+        <div class="flex-viewport">
+   
+<br/>
+          <ul class="slides">
+           
+            {% if settings.video_position == '1' %}{{ video_slide }}{% endif %}
+            {% if settings.slideshow_1_enabled %}
+              <li>
+                <a href="http://tokens-icons.com/pages/national-hockey-league"><img src="https://cdn.shopify.com/s/files/1/0226/2489/files/TI_animGIFS_October2014-30BB-PuckOpener.gif?14741" alt="{{ settings.image_1_alt_text | escape }}" /></a>
+                {% if settings.image_1_caption != blank %}
+                  <p class="flex-caption">{{ settings.image_1_caption }}</p>
+                {% endif %}
+              </li>
+            {% endif %}
+            {% if settings.video_position == '2' %}{{ video_slide }}{% endif %}
+            {% if settings.slideshow_2_enabled %}
+              <li>
+                <a href="http://tokens-icons.com/pages/churchill-downs"><img src="https://cdn.shopify.com/s/files/1/0226/2489/files/TI_animGIFS_Oct2014-CDIOpener.gif?14745" alt="{{ settings.image_2_alt_text | escape }}" /></a>
+                {% if settings.image_2_caption != blank %}
+                  <p class="flex-caption">{{ settings.image_2_caption }}</p>
+                {% endif %}
+              </li>
+            {% endif %}
+            
+            {% if settings.video_position == '3' %}{{ video_slide }}{% endif %}
+            {% if settings.slideshow_3_enabled %}
+              <li>
+                <a href="http://tokens-icons.com/pages/major-league-baseball"><img src="https://cdn.shopify.com/s/files/1/0226/2489/files/TI_animGIFS_October2014-BallOpener.gif?14741" alt="{{ settings.image_3_alt_text | escape }}" /></a>
+                {% if settings.image_3_caption != blank %}
+                  <p class="flex-caption">{{ settings.image_3_caption }}</p>
+                {% endif %}
+              </li>
+            {% endif %}
+            {% if settings.video_position == '4' %}{{ video_slide }}{% endif %}
+            {% if settings.slideshow_4_enabled %}
+              <li>
+                <a href="http://tokens-icons.com/products/the-players-pin-flag-wallet"><img src="https://cdn.shopify.com/s/files/1/0226/2489/files/TI_animGIFS_August2014-players_fa034ef5-f85f-4219-820b-b1037952405c.gif?14742" alt="{{ settings.image_4_alt_text | escape }}" /></a>
+                {% if settings.image_4_caption != blank %}
+                  <p class="flex-caption">{{ settings.image_4_caption }}</p>
+                {% endif %}
+              </li>
+            {% endif %}
+            {% if settings.video_position == '5' %}{{ video_slide }}{% endif %}
+            {% if settings.slideshow_5_enabled %}
+              <li>
+                <a href="http://tokens-icons.com/pages/transit-tokens"><img src="https://cdn.shopify.com/s/files/1/0226/2489/files/TI_animGIFS_August2014-token_f24c70b1-fffc-4bd7-8ded-afb0a0b8bb6c.gif?14743" alt="{{ settings.image_5_alt_text | escape }}" /></a>
+                {% if settings.image_5_caption != blank %}
+                  <p class="flex-caption">{{ settings.image_5_caption }}</p>
+                {% endif %}            
+              </li>
+            {% endif %}
+            
+           
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+
+{% if settings.homepage != blank %}
+  <div class="sixteen columns">
+    <div class="section">
+      {% if settings.slideshow_enabled %}{% endif %}<!--{{ pages[settings.homepage].title }}-->
+    </div>
+  </div>
+{% endif %}
+
+{% if settings.frontpage_linklist %}
+  {% assign linklist = linklists[settings.frontpage_linklist] %}
+  {% assign collections_per_row = settings.frontpage_collections_per_row %}
+  {% include 'collection-loop' %}
+{% endif %}
+
+{% if settings.frontpage_collection %}
+  {% assign collection = '' %}
+  {% assign products = collections[settings.frontpage_collection].products %}
+  {% assign products_per_row = settings.frontpage_products_per_row %}
+  <div class="sixteen columns">
+    {% include 'product-loop' %}
+  </div>
+{% endif %}
+
+{% if settings.homepage != blank %}
+
+  <div class="sixteen columns">
+    <div class="section clearfix" id="homepage-description">
+      {{ pages[settings.homepage].content }}
+      <h2>Tokens &amp; Icons creates products from authentic elements to pay homage to their histories and those who value them.</h2>
+      
+    </div>
+  </div>
+{% endif %}
+
+<!-- <div class="sixteen columns">
+  <div class="section clearfix">
+
+    {% if settings.blog_widget %}
+      <div class="alpha {% if settings.twitter_widget != blank %}two-thirds column{% else %}sixteen columns omega{% endif %}">
+        <h4 class="title"><a href="{{ blogs[settings.blog_widget_select].url }}">Recent Articles</a></h4>
+
+        {% for article in blogs[settings.blog_widget_select].articles limit:4 %}
+          <div class="{% if settings.twitter_widget != blank %}one-third column {% cycle 'alpha', 'omega' %}{% else %}four columns {% cycle 'alpha', '', '', 'omega' %}{% endif %}">
+
+            <a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a>
+            <div class="meta">
+              <span class="label">{{ article.published_at | date: "%B %d, %Y" }}</span>
+            </div>
+
+            {% if article.excerpt == blank %}
+              <p>
+                {{ article.content | strip_html | truncatewords: 40 }}
+              </p>
+            {% else %}
+              {{ article.excerpt }}
+            {% endif %}
+          </div>
+          {% if settings.twitter_widget != blank %}
+            {% cycle '', '<br class="clear" />', '', '' %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if settings.twitter_widget != blank %}
+      <div class="{% if settings.blog_widget %}one-third column{% else %}sixteen columns alpha{% endif %} omega">
+        {{ settings.twitter_widget }}
+      </div>
+    {% endif %}
+  </div>
+</div> -->
+

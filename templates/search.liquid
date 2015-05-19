@@ -1,0 +1,113 @@
+{% assign search_pagination = 30 %}
+
+<div class="sixteen columns">
+  <div class="section clearfix">
+    <h1>Search</h1>
+
+
+{% if search.performed %}
+  
+  {% paginate search.results by search_pagination %}
+
+          <div class="breadcrumb sixteen columns alpha omega">
+            <em>{{ search.results_count }} {{ search.results_count | pluralize: 'result', 'results' }} for <strong>"{{search.terms | escape}}"</strong></em>
+          </div>
+      </div>
+    </div>
+  
+    {% if search.results == empty %}  
+      <div class="sixteen columns">
+      	<div class="section clearfix">    
+          <p class="quote">Your search for <strong>"{{search.terms | escape}}"</strong> did not match any results.</p>         
+        </div>
+      </div>
+    {% else %}  
+
+      {% if search.results.first.price >= 0 %}
+        {% if settings.collection_sidebar %}
+          {% include 'collection-sidebar' %}
+          <div class="twelve columns">
+        {% else %}
+          <div class="sixteen columns">
+        {% endif %}
+
+        {% assign products = search.results %}
+        {% assign products_per_row = settings.products_per_row %}
+        {% include 'product-loop' with settings.collection_sidebar %}
+
+        </div>
+      {% else %}
+        {% assign blog_url = search.results.first.url | split: '/' %}
+        {% assign blog_handle = blog_url[2] %}
+        {% assign blog = blogs[blog_handle] %}
+
+        <div class="ten columns">
+          {% for article in search.results %}
+          <!-- Bold Apps Custom Order -->
+{% if item.metafields.inventory.ShappifyHidden == "true" %}{% else %}
+            <div class="clearfix article">
+              <h3><a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a></h3>
+            
+              <p class="meta">
+               <span class="label">Posted on</span> 
+               {{ article.published_at | date: "%B %d, %Y" }}
+               <span class="label">by</span> 
+               {{ article.author }}
+               
+               {% if article.comments_enabled? %}
+                | <a href="{{ article.url }}#comments" title="{{ article.title | escape }} Comments">{{ article.comments_count }} {{ article.comments_count | pluralize: 'Comment', 'Comments' }} </a>
+               {% endif %}
+              </p>
+          
+              {% if article.excerpt != blank %}
+                {{ article.excerpt }}
+              
+                <p class="continue_reading">
+                  <a href="{{ article.url }}" title="{{ article.title | escape }}">Continue Reading &rarr;</a>
+                </p>
+              {% else %}
+                {{ article.content }} 
+              {% endif %}
+              
+              {% include "social-buttons" with "article" %}
+              
+              <p class="meta">
+                {% for tag in article.tags %}
+                  {% if forloop.index0 == 0 %}
+                    <span class="label">Posted in</span>
+                  {% endif %}
+                  <a href="{{ shop.url }}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} tagged {{ tag | escape }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
+             
+                {% endfor %}
+              </p>
+            </div>
+        {% endif %}  {% endfor %}
+        </div>
+
+        {% include "blog-sidebar" with blog.handle %}
+
+      {% endif %}
+    {% endif %}
+  
+    {% include 'pagination' %}    
+  {% endpaginate %}
+
+{% else %}
+
+    </div>
+  </div>
+  <div class="section clearfix">  
+    <div class="eight columns align_right subtotal">
+      <p class="extra_padding">
+        Search for anything in our shop.
+      </p>
+    </div>    
+    <div class="eight columns">
+      <form class="search" action="/search">
+        <input type="hidden" name="type" value="article,product" />
+        <input type="text" name="q" class="search_box" placeholder="Search..." value="{{ search.terms }}" x-webkit-speech />
+      </form>
+    </div>
+  </div>
+
+{% endif %}

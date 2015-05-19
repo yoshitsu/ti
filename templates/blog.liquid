@@ -1,0 +1,47 @@
+{% paginate blog.articles by 7 %}
+  <div class="sixteen columns">
+    <div class="section clearfix">
+      <h1><a class="blog-name" href="{{ blog.url }}" title="{{ blog.title | escape }}">{{ blog.title }}</a></h1>
+    </div>
+  </div>
+
+  <div class="article-cards">
+    {% for article in blog.articles %}
+      <div class="clearfix article-card">
+        <h3 class="article-title"><a href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a></h3>
+
+        <p class="meta">
+         {{ article.published_at | date: "%B %d, %Y" }}
+        </p>
+
+        {% if article.excerpt != blank %}
+          <div class="article-content">
+            {{ article.excerpt }}
+            <a class="article-more" href="{{ article.url }}" title="{{ article.title | escape }}">&hellip; read more</a>
+          </div>
+        {% else %}
+          <div class="article-content">
+            {{ article.content }}
+          </div>
+        {% endif %}
+
+        {% if article.comments_enabled? %}
+          <a class="article-comment-count" href="{{ article.url }}#comments" title="{{ article.title | escape }} Comments">{{ article.comments_count }} {{ article.comments_count | pluralize: 'Comment', 'Comments' }} </a>
+         {% endif %}
+
+        <p class="meta">
+          {% for tag in article.tags %}
+            {% if forloop.index0 == 0 %}
+              <span class="label">Posted in</span>
+            {% endif %}
+            <a href="{{ shop.url }}/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" title="{{ blog.title }} tagged {{ tag | escape }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        </p>
+
+      </div>
+    {% endfor %}
+  </div>
+
+  {% include 'pagination' %}
+{% endpaginate %}
+

@@ -1,0 +1,68 @@
+{% if settings.product_zoom_enabled %}
+  {% assign image_size = 'master' %}
+{% else %}
+  {% assign image_size = 'grande' %}
+{% endif %}
+
+{% if settings.product_images_position == 'left' %}
+  
+  <div class="eight columns alpha">
+    {% for image in product.images %}
+      {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+        <div class="video-container">
+          {{ image.alt }}
+        </div>
+        <br class="clear" />
+      {% endif %}
+    {% endfor %}
+    
+    <div class="{% if product.images.size > 1 %}eight multiple_product_images{% else %}eight single_product_image{% endif %} columns alpha product_image_col" id="feature_image">
+      <a href="{{ product.featured_image | product_img_url: '1024x1024' }}" data-index="" title="{% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}{{ product.title | escape }}{% else %}{{ product.featured_image.alt | escape }}{% endif %}">
+        <img src="{{ product.featured_image | product_img_url: image_size }}" alt="{% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}{{ product.title | escape }}{% else %}{{ product.featured_image.alt | escape }}{% endif %}" itemprop="image" />
+      </a>
+    </div>
+
+    <div class="two columns product_image_col thumbnails omega {% if product.images.size == 1 %}hidden{% endif %}">
+      {% for image in product.images %}
+        {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+          {% assign alt_text = product.title %}
+        {% else %}
+          {% assign alt_text = image.alt %}
+        {% endif %}
+
+        <a href="{{ image | product_img_url: '1024x1024' }}" class="fancybox" rel="group" data-index="{{ forloop.index0 }}" title="{{ alt_text | escape }}"><img src="{{ image | product_img_url: image_size }}" alt="{{ alt_text | escape }}" /></a>
+      {% endfor %}
+    </div>
+  </div>
+
+{% else %}
+
+  <div class="eight columns omega">
+    {% for image in product.images %}
+      {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+        <div class="video-container">
+          {{ image.alt }}
+        </div>
+        <br class="clear" />
+      {% endif %}
+    {% endfor %}
+
+    <div class="two columns alpha product_image_col thumbnails {% if product.images.size == 1 %}hidden{% endif %}">
+      {% for image in product.images %}
+        {% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}
+          {% assign alt_text = product.title %}
+        {% else %}
+          {% assign alt_text = image.alt %}
+        {% endif %}
+
+        <a href="{{ image | product_img_url: '1024x1024' }}" class="fancybox" rel="group" data-index="{{ forloop.index0 }}" title="{{ alt_text | escape }}"><img src="{{ image | product_img_url: image_size }}" alt="{{ alt_text | escape }}" /></a>
+      {% endfor %}
+    </div>
+
+    <div class="{% if product.images.size > 1 %}eight multiple_product_images{% else %}eight single_product_image{% endif %} columns omega product_image_col" id="feature_image">
+      <a href="{{ product.featured_image | product_img_url: '1024x1024' }}" data-index="" title="{% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}{{ product.title | escape }}{% else %}{{ product.featured_image.alt | escape }}{% endif %}">
+        <img src="{{ product.featured_image | product_img_url: image_size }}" alt="{% if image.alt contains 'youtube' or image.alt contains 'vimeo' %}{{ product.title | escape }}{% else %}{{ product.featured_image.alt | escape }}{% endif %}" itemprop="image" />
+      </a>
+    </div>
+  </div>  
+{% endif %}

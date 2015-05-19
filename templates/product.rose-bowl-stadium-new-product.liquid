@@ -1,0 +1,175 @@
+<div class="sixteen columns">
+  <div class="clearfix breadcrumb product_breadcrumb">
+    <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="url"><span itemprop="title">Home</span></a></span>
+    &nbsp;&nbsp;/&nbsp;&nbsp;
+    <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+      {% if collection %}
+        <a href="{{ collection.url }}" title="{{ collection.title | escape }}">{{ collection.title }}</a>
+      {% else %}
+        <a href="/collections/all" title="All Products">Products</a>
+      {% endif %}
+    </span>
+    &nbsp;&nbsp;/&nbsp;&nbsp;
+    {{ product.title }}
+  </div>
+</div>
+
+<div class="sixteen columns">
+	<h1 class="product_name" itemprop="name">{{ product.title }}</h1>
+</div>
+
+<div class="sixteen columns" itemscope itemtype="http://data-vocabulary.org/Product" id="product-{{ product.id }}">
+	<div class="section product_section clearfix">
+
+  	 {% if settings.product_images_position == 'left' %}
+       {% assign products_per_row = settings.products_per_row %}
+
+       {% if settings.product_thumbnails_position == 'bottom' %}
+         {% include 'product-images-bottom' %}
+       {% else %}
+         {% include 'product-images' %}
+       {% endif %}
+     {% endif %}
+
+     <div class="eight columns {%if settings.product_images_position == 'left' %}omega{% else %}alpha{% endif %}">
+     
+
+       {% if settings.product_description_position == "top" %}
+         <div class="description" itemprop="description">
+           {{ product.description }}
+         </div>
+       {% endif %}
+
+       <!--<div class="product_price">
+          Price {{ product.price | money }}{% if product.available == false %} - {{ settings.sold_out_text }}{% endif %}
+       </div>
+
+       <div class="online-retailers">
+         <h5>Online Retailers</h5>
+         <img class="store-mlb" src="{{ 'mlb.png' | asset_url }}">
+         <img class="store-redenvelope" src="{{ 'redenvelope.png' | asset_url }}">
+         <img class="store-cufflinks" src="{{ 'cufflinks.png' | asset_url }}">
+       </div>
+
+       <div class="brick-mortar">
+         <h5>Brick &amp; Mortar</h5>
+         <p>Store Name (please call to check stock)</p>
+       </div>-->
+
+       {% include 'product-form' %}
+       <div id="add-to-cart-msg"></div>
+
+       {% if settings.product_description_position == "bottom" %}
+         <div class="description" itemprop="description">
+           {{ product.description }}
+         </div>
+       {% endif %}
+
+       <div class="meta">
+         {% if settings.display_collections %}
+           <p>
+             <span class="label">Collections:</span>
+             <span>
+              {% for col in product.collections %}
+                <a href="{{ col.url }}" title="{{ col.title }}">{{ col.title }}</a>{% unless forloop.last %},{% endunless %}
+              {% endfor %}
+            </span>
+          </p>
+         {% endif %}
+
+         {% if settings.display_tags %}
+            <p>
+              {% for tag in product.tags %}
+                {% if forloop.first %}
+                  <span class="label">Category:</span>
+                {% endif %}
+
+                {% unless tag contains 'meta-related-collection-' %}
+                  <span>
+                      <a href="/collections/{% if collection %}{{ collection.handle }}{% else %}all{% endif %}/{{ tag | handle }}" title="Products tagged {{ tag | escape}}">{{ tag }}</a>
+                  </span>
+                {% endunless %}
+              {% endfor %}
+            </p>
+         {% endif %}
+
+        {% if settings.display_type %}
+           <p>
+             <span class="label">Type:</span> <span itemprop="category">{{ product.type | link_to_type }}</span>
+           </p>
+        {% endif %}
+
+        {% if settings.display_vendor %}
+           <p>
+             <span class="label">Vendor:</span> <span itemprop="brand">{{ product.vendor | link_to_vendor }}</span>
+           </p>
+        {% endif %}
+       </div>
+  {% include 'product-notify-me-new-product' %}
+       {% include "social-buttons" with "product" %}
+
+       {% if collection %}
+         
+       {% endif %}
+
+    </div>
+
+    {% if settings.product_images_position == 'right' %}
+      {% assign products_per_row = settings.products_per_row %}
+
+      {% if settings.product_thumbnails_position == 'bottom' %}
+        {% include 'product-images-bottom' %}
+      {% else %}
+        {% include 'product-images' %}
+      {% endif %}
+    {% endif %}
+
+  </div>
+
+</div>
+
+<div class="sixteen columns">
+  <div class="section clearfix">
+     <div class="eight columns alpha">
+      <h6> Additional Product Information</h6>
+      <p>The Rose Bowl Stadium opened in 1922, twenty years after the first Rose Bowl Game was played in Tournament Park. The Rose Bowl was originally built in the shape of a horseshoe until 1928 when southern stands were added to complete the oval. The first Rose Bowl Game on New Years Day 1923 in its new stadium featured USC defeating Penn  State. Since then, every Rose Bowl Game has been hosted there except for the 1942 Game, which was a few weeks after Pearl Harbor and therefore hosted at Duke. Since 1945, the Rose Bowl Game has been the highest attended collegiate football game. The Stadium has been home to the UCLA Bruins football team since 1982, hosted five Superbowls, was the site of two Summer Olympics and has hosted men's and women's FIFA World Cup Finals.</p>
+    </div>
+    <div class="eight columns omega">
+      <img src="http://cdn.shopify.com/s/files/1/0226/2489/files/RoseBowlStadium-BW-500.jpg?10977">
+    </div>
+  </div>
+</div>
+{% include 'directed-edge' %}
+{% if settings.display_related_products %}
+  {% capture limit %}{{ settings.products_per_row | plus: 1 }}{% endcapture %}
+
+  {% if collection and collection.all_products_count > 1 %}
+    {% assign col = collection.handle %}
+  {% else %}
+    {% assign col = product.collections.last.handle %}
+  {% endif %}
+
+  {% for tag in product.tags %}
+    {% if tag contains 'meta-related-collection-' %}
+      {% assign col = tag | remove: 'meta-related-collection-' %}
+      {% assign collection = collections[col] %}
+      {% capture limit %}{{ collection.products_count | plus: 1 }}{% endcapture %}
+    {% endif %}
+  {% endfor %}
+
+  {% if col and collections[col].all_products_count > 0 %}
+    <div class="sixteen columns">
+      <div class="section clearfix">
+        <h2>{{ settings.related_products_title }}</h2>
+      </div>
+    </div>
+
+    {% assign skip_product = product %}
+    {% assign products = collections[col].products %}
+    {% assign products_per_row = settings.products_per_row %}
+    <div class="sixteen columns">
+      {% include 'product-loop' %}
+    </div>
+  {% endif %}
+
+{% endif %}

@@ -1,0 +1,25 @@
+{% if settings.notify_me_form %}  <div style="margin: 0 0 5px 0px;text-align:right;">
+<span class="prod-price">${{product.variants.first.price|money_without_currency}}</span></div><br/>
+  <div class="notify_form" id="notify-form-{{ product.id }}" {% if product.available %}style="display:none"{% endif %}>
+    {% form 'contact' %}
+      {% if form.posted_successfully? %}
+        <p><em>Thanks! We will notify you when this product is ready to ship!</em></p>
+      {% elsif form.errors %}
+        <p><em>Please provide a valid email address.</em></p>
+      {% else %}
+        <p>
+          <label for="contact[email]"><b>To receive a notification when this NEW item is available,<br/>please enter your email address below. Thank you for your interest!</b></label>
+          <br/>
+          {% if customer %}
+            <input type="hidden" name="contact[email]" value="{{ customer.email }}" />
+          {% else %}
+          <input required type="email" name="contact[email]" id="contact[email]" placeholder="Enter your email address..." value="{{ contact.fields.email }}" style="display:inline;margin-bottom:0px;" />
+          {% endif %}
+          
+          <input type="hidden" name="contact[body]" value="Please notify me when {{ product.title | remove: '"' }} becomes available - {{ shop.url }}{{ product.url }}" />
+          <input class="submit" type="submit" value="Send" style="margin-bottom:0px" />    
+        </p>
+      {% endif %}
+    {% endform %}
+  </div>
+{% endif %}

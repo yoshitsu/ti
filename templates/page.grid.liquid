@@ -1,0 +1,18 @@
+<div class="container-grid content">
+
+
+<div class="container-grid seventeen columns-grid" class="grid" >
+  <div class="section clearfix" >  
+    {{ page.content }}
+  </div>
+</div>
+</div>
+<script type="text/javascript" src="{{ 'gridify.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'jqery-1.11.1.min.js' | asset_url }}"></script>
+<script type="text/javascript">
+    window.onload = function(){
+        document.querySelector('.grid').gridify({srcNode: 'img', margin: '10px', width: '600px', resizable: true});
+    }
+    
+			
+</script>

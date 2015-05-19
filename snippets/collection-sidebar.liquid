@@ -1,0 +1,44 @@
+<div class="sidebar four columns">
+  {% if settings.collection_sidebar_linklist != blank %}
+    <h4 class="toggle"><span>+</span>{{ linklists[settings.collection_sidebar_linklist].title }}</h4>
+    <ul class="blog_list toggle_list">
+      {% for link in linklists[settings.collection_sidebar_linklist].links %}
+        <li {% if link.active %}class="active"{% endif %}><a href="{{ link.url }}" title="{{ link.title | escape }}">{{ link.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  
+  {% if settings.filter_by_category %}
+    <h4 class="toggle"><span>+</span>Collections</h4>
+    <ul class="blog_list toggle_list">
+      {% for col in collections %}
+        {% unless col.handle == 'frontpage' %}
+          <li {% if col.handle == collection.handle %}class="active"{% endif %}><a href="{{ col.url }}" title="{{ col.title | escape }}">{{ col.title }}</a></li>
+        {% endunless %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if settings.collection_sidebar_products %}
+    <h4 class="toggle"><span>+</span>Products</h4>
+    <ul class="blog_list toggle_list">
+      {% for product_type in shop.types %}
+        <li {% if product_type == collection.title %}class="active"{% endif %}>{{ product_type | link_to_type }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if settings.collection_sidebar_vendors %}
+    <h4 class="toggle"><span>+</span>Vendors</h4>
+    <ul class="blog_list toggle_list">
+      {% for product_vendor in shop.vendors %}
+        <li {% if product_vendor == collection.title %}class="active"{% endif %}>{{ product_vendor | link_to_vendor }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if settings.collection_sidebar_page != blank %}
+    <h4>{{ pages[settings.collection_sidebar_page].title }}</h4>
+    {{ pages[settings.collection_sidebar_page].content }}
+  {% endif %}
+</div>

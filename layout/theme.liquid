@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="cleartype" content="on">
+    <meta name="robots" content="index,follow">
+    <meta name="p:domain_verify" content="c7ea7fa4743119b3b475fc9a5b462a61"/>
+<meta name="google-site-verification" content="65BzPeHVjDtT2CEm5lvqnbmDsbFQSazEs9vi7HQnb9A" />
+    <meta name="google-site-verification" content="A0NYVaJ-8PYIBok5SQwilN0n7IqKfK_FSsFPx6FIaFQ" />
+    <title>
+      {% if template contains "index" and page_title != 'Welcome' %}
+        {{ page_title }}
+      {% elsif template contains "index" and pages[settings.homepage].title != blank %}
+        {{ pages[settings.homepage].title }} | {{ shop.name }}
+      {% else %}
+        {{ page_title }}
+        {% if current_tags %}tagged "{{ current_tags }}"{% endif %}
+        {% if current_page != 1 %}Page {{ current_page }}{% endif %}
+        | {{ shop.name }}
+      {% endif %}
+    </title>
+{% if template == '404' %}<meta http-equiv="refresh" content="0;URL={{ shop.url }}" />{% endif %}
+    
+    {% if template contains 'list-collections' %}
+      <meta name="description" content="Product collections from {{ shop.name }} - Page {{ current_page}}" />
+    {% elsif page_description != '' %}
+      <meta name="description" content="{{ page_description }}" />
+    {% endif %}
+
+    {% if settings.twitter_username != '' %}
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:site" content="@{{ settings.twitter_username }}">
+      <meta name="twitter:creator" content="@{{ settings.twitter_username }}">
+    {% endif %}
+
+    {% if template contains 'product' %}
+      <meta property="og:url" content="{{ shop.url }}{{ product.url }}" />
+      <meta property="og:title" content="{{ page_title | escape }}" />
+      <meta property="og:description" content="{{ page_description | escape }}" />
+      <meta property="og:image" content="{{ product.featured_image | product_img_url: 'medium' }}" />
+      <meta property="og:type" content="product" />
+      <meta property="og:price:amount" content="{{ product.price | money_without_currency }}" />
+      <meta property="og:price:currency" content="{{ shop.currency }}" />
+      <meta property="og:availability" content="{% if product.available %}instock{% else %}out of stock{% endif %}" />
+    {% elsif template contains 'article' %}
+      <meta property="og:url" content="{{ shop.url }}{{ article.url }}" />
+      <meta property="og:title" content="{{ page_title | escape }}" />
+      <meta property="og:description" content="{{ page_description | escape }}" />
+      <meta property="og:type" content="article" />
+      {% if article.content contains "<img" %}
+        {% assign src = article.content | split: 'src="' %}
+        {% assign src = src[1] | split: '"' | first | replace: '//cdn', 'http://cdn' | replace: 'http:http://', 'http://' | remove: 'https:' %}
+        {% if src %}<meta property="og:image" content="{{ src }}" />{% endif %}
+      {% endif %}
+    {% else %}
+      {% if settings.use_logo %}
+        <meta property="og:image" content="{{ 'logo.png' | asset_url }}" />
+      {% endif %}
+      <meta property="og:url" content="{{ canonical_url }}" />
+      <meta property="og:title" content="{{ page_title | escape }}" />
+      <meta property="og:description" content="{{ page_description | escape }}" />
+      <meta property="og:type" content="website" />
+    {% endif %}
+
+    <meta property="og:site_name" content="{{ shop.name }}" />
+    <meta name="author" content="{{ shop.name }}">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+	{% comment %}
+	<meta name="viewport" content="user-scalable=yes, minimum-scale=0.75, maximum-scale=3.0" />
+	{% endcomment %}
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, minimum-scale=0.75, maximum-scale=2.0" />
+	
+
+    <!-- Stylesheets -->
+    {{ 'styles.scss.css' | asset_url | stylesheet_tag }}
+
+    <!-- Icons -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ 'favicon.png' | asset_url }}">
+    <link rel="canonical" href="{{ canonical_url }}" />
+
+    <!-- Custom Fonts -->
+    <link href='//fonts.googleapis.com/css?family=.|{% if settings.logo_typeface_method == "google_webfonts" %}{{ settings.logo_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.headline_typeface_method == "google_webfonts" %}{{ settings.headline_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.top_bar_typeface_method == "google_webfonts" %}{{ settings.top_bar_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.nav_typeface_method == "google_webfonts" %}{{ settings.nav_google_webfont_font }}:light,normal,bold|{% endif %}{% if settings.regular_typeface_method == "google_webfonts" %}{{ settings.regular_google_webfont_font }}:light,normal,bold{% endif %}' rel='stylesheet' type='text/css'>
+
+    {% if template contains 'customer' %}
+      {{ "shopify_common.js" | shopify_asset_url | script_tag }}
+      {{ "customer_area.js"  | shopify_asset_url | script_tag }}
+      <!--[if lt IE 7]>
+        {{ 'json2.js' | shopify_asset_url | script_tag }}
+      <![endif]-->
+    {% endif %}
+
+    <!-- jQuery and jQuery fallback -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write("<script src='{{ "jquery-1.8.3.min.js" | asset_url }}'>\x3C/script>")</script>
+    {{ 'app.js' | asset_url | script_tag }}
+    {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+    {{ 'inlinecart.js' | asset_url | script_tag }}
+    {{ content_for_header }}
+    
+    <!-- isotope js-->
+    <script type="text/javascript" src="{{ 'isotope.pkgd.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'cells-by-column.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'cells-by-row.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'fits-column.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'horizontal.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'masonry-horizontal.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'jqery-1.11.1.min.js' | asset_url }}"></script>
+<script type="text/javascript">
+$( function() {
+  // init Isotope
+  var $container = $('.isotope').isotope({
+    itemSelector: '.item',
+    //layoutMode: 'masonry',
+    //masonry: {
+     // columnWidth: 306
+    //},
+    //cellsByRow: {
+     // columnWidth: 606,
+     // rowHeight: 606
+   // },
+   // masonryHorizontal: {
+   //   rowHeight: 306
+   // },
+   // cellsByColumn: {
+     // columnWidth: 606,
+      //rowHeight: 606
+   // },
+   // gutter:2
+    layoutMode: 'fitRows'
+  });
+
+  var isHorizontal = false;
+  var $window = $( window );
+
+  $('#layout-mode-button-group').on( 'click', 'button', function() {
+    // adjust container sizing if layout mode is changing from vertical or horizontal
+    var $this = $(this);
+    var isHorizontalMode = !!$this.attr('data-is-horizontal');
+    if ( isHorizontal !== isHorizontalMode ) {
+      // change container size if horiz/vert change
+      var containerStyle = isHorizontalMode ? {
+        height: $window.height() * 0.7
+      } : {
+        width: 'auto'
+      };
+      $container.css( containerStyle );
+      isHorizontal = isHorizontalMode;
+    }
+    // change layout mode
+    var layoutModeValue = $this.attr('data-layout-mode-value');
+    $container.isotope({ layoutMode: layoutModeValue });
+  });  
+
+			
+</script>
+    <!--end isotope js-->
+    
+
+    
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+    <div class="container content">
+      {% include "social-buttons" with "global" %}
+      <div class="sixteen columns logo">
+        <!--<a href="{{ shop.url }}" title="{{ shop.name }}">-->
+          {% if settings.use_logo %}
+        <a href="http://tokens-icons.com/"> <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" usemap="#Map"/></a>
+          <map name="Map">
+  <area shape="rect" coords="2,1,293,42" href="{{ shop.url }}">
+          {% else %}
+            {{ shop.name }}
+          {% endif %}
+            <!--</a>-->
+      </div>
+
+      <div class="sixteen columns clearfix">
+        <div id="nav" style="display: none;">
+          <ul id="menu">
+            {% for link in linklists[settings.main_linklist].links %}
+              {% if linklists[link.handle] == empty %}
+                <li><a href="{{ link.url }}" title="{{ link.title }}" {% if link.active %}class="active"{% endif %}>{{ link.title }}</a></li>
+              {% else %}
+                <li><a href="{{ link.url }}" title="{{ link.title }}" {% if link.active %}class="active"{% endif %} {% for link in linklists[link.handle].links %}{% if link.active %}class="active"{% endif %}{% endfor %}>{{ link.title }}
+                  <span class="arrow">&or;</span></a>
+                  <ul>
+                    {% for link in linklists[link.handle].links %}
+                      {% if linklists[link.handle] == empty %}
+                        <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a></li>
+                      {% else %}
+                      <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }} <span class="arrow"> &gt;</span></a>
+                        <ul>
+                          {% for link in linklists[link.handle].links %}
+                            <li><a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="sixteen columns clearfix" id="token-nav">
+        {% if cart.item_count > 0 %}
+        <div id="tokens-cart">
+          <a href="/cart" class="cart" title="Shopping Cart">Cart ({{ cart.item_count }})</a>
+        </div>
+        {% endif %}
+        <div id="tokens-search">
+          <form class="search" action="/search">
+            <input type="hidden" name="type" value="product" />
+            <input type="text" name="q" class="search_box" placeholder="" value="{% if search and search.results.first.price %}{{ search.terms }}{% endif %}" />
+          </form>
+        </div>
+        <div id="the-goods">
+          <div class="trigger">The Goods</div>
+          <nav class="menu-large">
+            <div class="menu-top">
+              <ul>
+                  <li class="main"><a href="/pages/sports">Sports</a></li>
+                  <li><a href="/pages/major-league-baseball">MLB</a></li>
+                <li><a href="/pages/national-football-league">NFL</a></li>
+                  <li><a href="/pages/national-hockey-league">NHL</a></li>
+                <li><a href="/pages/collegiate">Collegiate</a></li>
+                 <li><a href="/pages/pga-tour">PGA TOUR</a></li>
+                  <li><a href="/pages/golf-and-tennis">Golf and Tennis</a></li>
+                  <li><a href="/pages/vintage-arenas">Vintage Arenas</a></li>
+                 <li><a href="/pages/churchill-downs">Churchill Downs</a></li>
+              </ul>
+              <ul>
+                  <li class="main"><a href="/pages/historic">Historic</a></li>
+                  <li><a href="/pages/transit-tokens">Transit Tokens</a></li>
+                <li><a href="/pages/coins">Coins</a></li>
+                  <li><a href="/pages/alphabet">Alphabet</a></li>
+                  <li><a href="/pages/time">Time</a></li>
+                 <li><a href="/pages/tools">Tools</a></li>
+                 <li><a href="/pages/transport"> Transport</a></li>
+                 <li><a href="/pages/furniture-art">Gallery</a></li>
+
+              </ul>
+              <ul>
+                  <li class="main"><a href="/pages/product-page">By Product</a></li>
+                  <li><a href="/pages/cuff-links">Cuff Links</a></li>
+                <li><a href="/pages/bottle-opener">Bottle Opener</a></li>
+                  <li><a href="/pages/wallet-money-clip">Wallet &amp; Money Clip</a></li>
+                  <li><a href="/pages/pen">Pen</a></li>
+                  <li><a href="/pages/pendant-bracelet-earrings">Pendant, Bracelet  &amp; Earrings</a></li>
+                  <li><a href="/pages/key-ring">Key Ring</a></li>
+                  <li><a href="/pages/cuff-links-storage">Cuff Links Storage</a></li>
+                 <li><a href="/pages/furniture-art">Industrial Art</a></li>
+              </ul>
+              <ul>
+                <li class="main"><a href="#">By City</a></li>
+                <li><a href="/collections/boston">Boston</a></li>
+                <li><a href="/collections/chicago">Chicago</a></li>
+                <li><a href="/collections/dallas">Dallas</a></li>
+                  <li><a href="/collections/los-angeles">Los Angeles</a></li>
+                  <li><a href="/collections/new-york-city">New York City</a></li>
+                  <li><a href="/collections/philadelphia">Philadelphia</a></li>
+                  <li><a href="/collections/phoenix">Phoenix</a></li>                
+                  <li><a href="/collections/san-francisco">San Francisco</a></li>
+                  <li><a href="/collections/st-louis">St. Louis</a></li>
+                
+              </ul>
+          </div>
+          <div class="menu-bottom">
+            <a href="/pages/whats-new" class="whats-new">What's New</a> 
+            <a href="/pages/authentication" class="authentication">Authentication</a>
+               
+          </div>
+          </nav>
+        </div>
+      </div>
+        
+     
+      {% if settings.featured_content_page != blank %}
+        <div class="sixteen columns">
+          <div class="section clearfix featured_content">
+            {{ pages[settings.featured_content_page].content }}
+          </div>
+        </div>
+      {% endif %}
+   
+
+      {% if template contains 'list-collections' %}
+        {% include 'collection-listing' %}
+      {% else %}
+        {{ content_for_layout }}
+      {% endif %}
+
+    </div> 
+      
+
+      
+<!--end container-->
+    <div class="footer" id="tokens-footer">
+      <div class="container">
+        <div class="sixteen columns">
+
+          <div class="three columns alpha">
+            <a href="/pages/store-locator" class="main">Store Locator</a>
+          </div>
+          <div class="three columns" style="margin-top: 2px;">
+            <ul>
+              <li><a href="/pages/about-us" class="main">About Us</a></li>
+              <li><a href="/pages/the-tokens-icons-story">Story</a></li>
+             <li><a href="/pages/partners">Craftsmanship</a></li>
+              <li><a href="/pages/whats-new">What's New</a></li>
+            </ul>
+          </div>
+          <div class="three columns" style="margin-top: 2px;">
+            <ul>
+              <li><a href="/pages/customer-service" class="main">Customer Service</a></li>
+              <li><a href="/pages/contact">Contact Us</a></li>
+              <li><a href="/pages/ordering-info">Ordering Info</a></li>
+              <li><a href="/pages/shipping-handling">Shipping &amp; Handling</a></li>
+              <li><a href="/pages/returns">Returns</a></li>
+            </ul>
+          </div>
+          <div class="three columns">
+            <ul>
+              <li> <a href="/pages/authentication" class="main">Authentication</a></li>
+            <li><a href="/pages/mlb-authentication">MLB</a></li>
+              <li><a href="/pages/nhl-authentication">NHL</a></li>
+              <li><a href="/pages/pga-tour-authentication">PGA TOUR</a></li>
+              <li><a href="/pages/collegiate-authentication">Collegiate</a></li></ul>
+          </div>
+          <div class="four columns omega copyright">
+            Copyright 2015<br/>
+            &copy; Tokens &amp; Icons
+          </div>
+        </div>
+      </div>
+    </div> <!-- end footer -->
+
+    <div id="cart_tab">
+      <ul>
+        <li class="cart-link cart_click">
+          <a class="num-items-in-cart cart_click">
+          <span class="icon">
+          {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}
+            </span>
+          </a>
+        </li>
+        <li class="checkout-link">
+          <a href="/cart" >Checkout</a>
+        </li>
+      </ul>
+    </div><!-- /#cart_tab -->
+
+    {% if settings.display_social_buttons or settings.display_social_buttons_blog %}
+      <script type="text/javascript">
+        (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+          po.src = 'https://apis.google.com/js/plusone.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+      </script>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    {% endif %}
+      
+      {% if template == 'collection' %}{% if collection.handle %}{% else %}
+<meta name="robots" content="noindex,follow" />
+{% endif %}{% endif %}
+    
+    <script type="text/javascript">
+      $(document).ready(function() {
+
+          // EVERYTHING FOR THE CART
+          var overlay = $("#cart_slide");
+          var cartContainer = $("#slideout_inner");
+
+          function cartOpen() {
+            cartContainer.fadeIn("slow");
+            overlay.addClass("overlay");
+          }
+
+          function cartClose() {
+           cartContainer.fadeOut("medium");
+           overlay.removeClass("overlay");
+          }
+
+          $(".cart_tab").click(function () {
+              cartOpen();
+            });
+
+          $("#add-to-cart-msg").click(function () {
+              cartOpen();
+            });
+
+         $("#cart_close").click(function () {
+              cartClose();
+            });
+
+          // CLOSES EVERYTHING
+          overlay.click(function () {
+              shareClose();
+              cartClose()
+            });
+      		
+        
+          if(navigator.platform == "iPad" || navigator.platform == "iPhone") {
+                $("a").each(function() { // have to use an `each` here - either a jQuery `each` or a `for(...)` loop
+                    var onClick; // this will be a function
+                    var firstClick = function() {
+                        onClick = secondClick;
+                        return false;
+                    };
+                    var secondClick = function() {
+                        onClick = firstClick;
+                        return true;
+                    };
+                    onClick = firstClick;
+                    $(this).click(function() {
+                        return onClick();
+                    });
+                });
+            }
+      });
+    </script>
+<a href="https://plus.google.com/101400652388109402724" rel="publisher"></a>
+  </body>
+</html>
